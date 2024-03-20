@@ -1,5 +1,8 @@
 module.exports = {
   root: true,
+  daisyui: {
+    themes: ["light", "dark", "cupcake"],
+  },
   env: { browser: true, es2020: true, node: true },
   extends: [
     'eslint:recommended',
