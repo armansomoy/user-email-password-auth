@@ -12,7 +12,8 @@ const HeroRegister = () => {
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
-    console.log(email, password);
+    const accepted = e.target.terms.checked;
+    console.log(email, password, accepted);
     if (password.length < 6) {
       setRegisterError("Password should be at leat 6 Charecters or Longer");
       return;
@@ -21,6 +22,8 @@ const HeroRegister = () => {
         "You Password Should Have One At Least UpperCase Charcter"
       );
       return;
+    } else if(!accepted){
+        setRegisterError('Please accept terms & Conditions')
     }
     // reset
     setRegisterError("");
@@ -62,7 +65,7 @@ const HeroRegister = () => {
                   required
                 />
               </div>
-              <div className="form-control">
+              <div className="form-control relative">
                 <label className="label">
                   <span className="label-text">Password</span>
                 </label>
@@ -73,24 +76,31 @@ const HeroRegister = () => {
                   className="input input-bordered"
                   required
                 />
-                <label className="label">
+                <label className="label absolute top-12 right-2">
                   <p
                     className="label-text-alt link link-hover"
                     onClick={() => {
                       setShowPassword(!showPassword);
                     }}
                   >
-                    {
-                        showPassword ? <FaEyeSlash></FaEyeSlash> : <FaEye />
-                    }
+                    {showPassword ? <FaEyeSlash></FaEyeSlash> : <FaEye />}
                   </p>
                 </label>
-                <label className="label">
-                  <a href="#" className="label-text-alt link link-hover">
-                    Forgot password?
-                  </a>
+              </div>
+              <div className="flex ">
+                <input type="checkbox" id="terms" name="terms" className="mr-2" required />
+
+                <label className="label" htmlFor="terms">
+                  <p className="label-text-alt link link-hover">
+                    Accept our Terms & Conditions
+                  </p>
                 </label>
               </div>
+              <label className="label">
+                <a href="#" className="label-text-alt link link-hover">
+                  Forgot password?
+                </a>
+              </label>
               <div className="form-control mt-6">
                 <button className="btn btn-primary">Login</button>
               </div>
