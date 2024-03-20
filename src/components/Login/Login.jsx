@@ -1,20 +1,51 @@
-import { signInWithEmailAndPassword } from "firebase/auth";
-import React from "react";
+import { sendPasswordResetEmail, signInWithEmailAndPassword } from "firebase/auth";
+import React, { useRef, useState } from "react";
 import auth from "../../firebase.config";
+import { Link } from "react-router-dom";
 
 const Login = () => {
-    const handleLogin = e => {
-        e.preventDefault();
-        const email = e.target.email.value;
-        const password = e.target.password.value;
-        console.log(email, password)
+  const [loginSuccess, setLoginSuccess] = useState("");
+  const [loginError, setLoginError] = useState("");
+  const emailRef = useRef(null);
 
-        // add validation 
+  const handleLogin = (e) => {
+    e.preventDefault();
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+    console.log(email, password);
 
-        signInWithEmailAndPassword(auth, email, password)
-        .then(res => {console.log(res.user)})
-        .catch(err => console.log(err))
+    // add validation
+
+    // reset
+    setLoginError("");
+    setLoginSuccess("");
+
+    signInWithEmailAndPassword(auth, email, password)
+      .then((res) => {
+        console.log(res.user);
+        setLoginSuccess("Login Sucessfully");
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoginError(err.message);
+      });
+  };
+
+  const handleForgetPassword = () => {
+    const email = emailRef.current.value;
+    if (!email) {
+      console.log("click", emailRef.current.value);
+      return;
+    } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+      console.log("please write a valid email");
+      return;
     }
+
+    // send validations email 
+    sendPasswordResetEmail(auth, email)
+    .then(() => {console.log('check your email')})
+    .catch( err => console.log(err))
+  };
   return (
     <div>
       <div className="hero min-h-screen bg-base-200">
@@ -36,6 +67,7 @@ const Login = () => {
                 <input
                   type="email"
                   name="email"
+                  ref={emailRef}
                   placeholder="email"
                   className="input input-bordered"
                   required
@@ -53,7 +85,11 @@ const Login = () => {
                   required
                 />
                 <label className="label">
-                  <a href="#" className="label-text-alt link link-hover">
+                  <a
+                    onClick={handleForgetPassword}
+                    href="#"
+                    className="label-text-alt link link-hover"
+                  >
                     Forgot password?
                   </a>
                 </label>
@@ -61,6 +97,32 @@ const Login = () => {
               <div className="form-control mt-6">
                 <button className="btn btn-primary">Login</button>
               </div>
+              <label className="label text-center" htmlFor="terms">
+                <Link
+                  to="/heroRegister"
+                  className="label-text-alt  link link-hover"
+                >
+                  Don't have an Account, Please Register
+                </Link>
+              </label>
+              <label className="label">
+                {loginSuccess && (
+                  <a
+                    href="#"
+                    className="label-text-alt link link-hover text-green-400"
+                  >
+                    {loginSuccess}
+                  </a>
+                )}
+                {loginError && (
+                  <a
+                    href="#"
+                    className="label-text-alt link link-hover text-red-400"
+                  >
+                    {loginError}
+                  </a>
+                )}
+              </label>
             </form>
           </div>
         </div>

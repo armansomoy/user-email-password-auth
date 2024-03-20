@@ -2,6 +2,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
 import auth from "../../firebase.config";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const HeroRegister = () => {
   const [registerError, setRegisterError] = useState("");
@@ -22,8 +23,8 @@ const HeroRegister = () => {
         "You Password Should Have One At Least UpperCase Charcter"
       );
       return;
-    } else if(!accepted){
-        setRegisterError('Please accept terms & Conditions')
+    } else if (!accepted) {
+      setRegisterError("Please accept terms & Conditions");
     }
     // reset
     setRegisterError("");
@@ -88,7 +89,13 @@ const HeroRegister = () => {
                 </label>
               </div>
               <div className="flex ">
-                <input type="checkbox" id="terms" name="terms" className="mr-2" required />
+                <input
+                  type="checkbox"
+                  id="terms"
+                  name="terms"
+                  className="mr-2"
+                  required
+                />
 
                 <label className="label" htmlFor="terms">
                   <p className="label-text-alt link link-hover">
@@ -104,6 +111,12 @@ const HeroRegister = () => {
               <div className="form-control mt-6">
                 <button className="btn btn-primary">Login</button>
               </div>
+              <label className="label text-center" htmlFor="terms">
+                <Link to="/login" className="label-text-alt  link link-hover">
+                  Already have an Acount, Please Login
+                </Link>
+              </label>
+
               <label className="label">
                 {registerError && (
                   <p className="label-text-alt link link-hover text-red-500">
